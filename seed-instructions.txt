@@ -1,0 +1,2 @@
+After `npm install` and `npx prisma db push`, run:
+node prisma/seed.js
