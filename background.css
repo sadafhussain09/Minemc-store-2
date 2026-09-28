@@ -1,0 +1,200 @@
+/* MINE MC - Animated Minecraft Style Background */
+
+.mc-background {
+    position: fixed;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 35%,
+            rgba(255, 105, 0, 0.16),
+            transparent 35%),
+        linear-gradient(
+            180deg,
+            #030303 0%,
+            #080808 45%,
+            #110904 100%
+        );
+}
+
+/* Moving orange glow */
+
+.mc-background::before {
+    content: "";
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    left: 50%;
+    top: 25%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+
+    background: radial-gradient(
+        circle,
+        rgba(255, 115, 0, 0.18),
+        rgba(255, 115, 0, 0.05) 35%,
+        transparent 70%
+    );
+
+    filter: blur(15px);
+
+    animation: mcGlow 6s ease-in-out infinite;
+}
+
+@keyframes mcGlow {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.25);
+        opacity: 1;
+    }
+}
+
+/* Minecraft-like block grid */
+
+.mc-grid {
+    position: absolute;
+    inset: -100px;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,0.025) 2px,
+            transparent 2px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,0.025) 2px,
+            transparent 2px
+        );
+
+    background-size: 80px 80px;
+
+    transform: perspective(500px)
+               rotateX(60deg)
+               scale(1.5);
+
+    transform-origin: center bottom;
+
+    animation: gridMove 12s linear infinite;
+}
+
+@keyframes gridMove {
+
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 80px;
+    }
+}
+
+/* Floating particles */
+
+.mc-particles {
+    position: absolute;
+    inset: 0;
+}
+
+.mc-particles span {
+    position: absolute;
+
+    width: 4px;
+    height: 4px;
+
+    background: #ff7900;
+
+    box-shadow:
+        0 0 10px #ff7900,
+        0 0 20px rgba(255,121,0,0.6);
+
+    animation: particleFloat linear infinite;
+
+    opacity: 0;
+}
+
+.mc-particles span:nth-child(1) {
+    left: 8%;
+    animation-duration: 7s;
+    animation-delay: 1s;
+}
+
+.mc-particles span:nth-child(2) {
+    left: 18%;
+    animation-duration: 9s;
+    animation-delay: 3s;
+}
+
+.mc-particles span:nth-child(3) {
+    left: 31%;
+    animation-duration: 6s;
+    animation-delay: 2s;
+}
+
+.mc-particles span:nth-child(4) {
+    left: 47%;
+    animation-duration: 10s;
+}
+
+.mc-particles span:nth-child(5) {
+    left: 63%;
+    animation-duration: 8s;
+    animation-delay: 4s;
+}
+
+.mc-particles span:nth-child(6) {
+    left: 76%;
+    animation-duration: 11s;
+    animation-delay: 1s;
+}
+
+.mc-particles span:nth-child(7) {
+    left: 88%;
+    animation-duration: 7s;
+    animation-delay: 3s;
+}
+
+.mc-particles span:nth-child(8) {
+    left: 94%;
+    animation-duration: 9s;
+}
+
+@keyframes particleFloat {
+
+    0% {
+        transform: translateY(110vh) scale(0.5);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.8;
+    }
+
+    80% {
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: translateY(-20vh) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Dark cinematic overlay */
+
+.mc-vignette {
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 25%,
+            rgba(0,0,0,0.55) 100%
+        );
+}
