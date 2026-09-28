@@ -133,10 +133,12 @@ function loadProducts() {
 
 function buyProduct(name, price) {
 
-    alert(
-        `You selected ${name} for ₹${price}.\n\nPayment system will be connected in the next step.`
-    );
-
-}
+    const url =
+        "payment.html?product=" +
+        encodeURIComponent(name) +
+        "&price=" +
+        encodeURIComponent(price);
+    window.location.href = url;
+}    
 
 document.addEventListener("DOMContentLoaded", loadProducts);
