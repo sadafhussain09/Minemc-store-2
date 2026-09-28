@@ -1,4 +1,6 @@
-// MINE MC STORE PRODUCTS
+// ================================
+// MINE MC STORE
+// ================================
 
 const products = [
     {
@@ -6,24 +8,23 @@ const products = [
         name: "VIP",
         price: 49,
         icon: "👑",
-        description: "Unlock VIP perks on MINE MC",
-        command: "/lp user {player} parent set vip"
+        description: "Unlock VIP perks on MINE MC."
     },
+
     {
         category: "Ranks",
         name: "MVP",
         price: 99,
         icon: "💎",
-        description: "Premium MVP rank with exclusive perks",
-        command: "/lp user {player} parent set mvp"
+        description: "Premium MVP rank with exclusive perks."
     },
+
     {
         category: "Ranks",
         name: "MVP+",
         price: 199,
         icon: "🔥",
-        description: "Ultimate premium rank",
-        command: "/lp user {player} parent set mvpplus"
+        description: "Ultimate premium rank for MINE MC."
     },
 
     {
@@ -31,24 +32,23 @@ const products = [
         name: "1,000 Coins",
         price: 29,
         icon: "🪙",
-        description: "Add 1,000 coins to your account",
-        command: "/eco give {player} 1000"
+        description: "Add 1,000 coins to your Minecraft account."
     },
+
     {
         category: "Coins",
         name: "5,000 Coins",
         price: 99,
         icon: "💰",
-        description: "Add 5,000 coins to your account",
-        command: "/eco give {player} 5000"
+        description: "Add 5,000 coins to your Minecraft account."
     },
+
     {
         category: "Coins",
         name: "10,000 Coins",
         price: 169,
         icon: "💰",
-        description: "Add 10,000 coins to your account",
-        command: "/eco give {player} 10000"
+        description: "Add 10,000 coins to your Minecraft account."
     },
 
     {
@@ -56,24 +56,23 @@ const products = [
         name: "Common Key",
         price: 19,
         icon: "🔑",
-        description: "Open a Common Crate",
-        command: "/crate key give {player} common 1"
+        description: "Open a Common Crate."
     },
+
     {
         category: "Crate Keys",
         name: "Rare Key",
         price: 49,
         icon: "🗝️",
-        description: "Open a Rare Crate",
-        command: "/crate key give {player} rare 1"
+        description: "Open a Rare Crate."
     },
+
     {
         category: "Crate Keys",
         name: "Legendary Key",
         price: 99,
         icon: "🔥",
-        description: "Open a Legendary Crate",
-        command: "/crate key give {player} legendary 1"
+        description: "Open a Legendary Crate."
     },
 
     {
@@ -81,12 +80,17 @@ const products = [
         name: "Season Pass",
         price: 149,
         icon: "🏆",
-        description: "Unlock exclusive Season rewards",
-        command: "/seasonpass give {player}"
+        description: "Unlock exclusive seasonal rewards."
     }
 ];
 
+
+// ================================
+// CREATE PRODUCT CARD
+// ================================
+
 function createProductCard(product) {
+
     return `
         <div class="product-card">
 
@@ -98,9 +102,13 @@ function createProductCard(product) {
                 ${product.category}
             </div>
 
-            <h3>${product.name}</h3>
+            <h3>
+                ${product.name}
+            </h3>
 
-            <p>${product.description}</p>
+            <p>
+                ${product.description}
+            </p>
 
             <div class="product-bottom">
 
@@ -110,7 +118,8 @@ function createProductCard(product) {
 
                 <button
                     class="buy-btn"
-                    onclick="buyProduct('${product.name}', ${product.price})">
+                    onclick="buyProduct('${product.name}', ${product.price})"
+                >
                     BUY NOW
                 </button>
 
@@ -120,25 +129,53 @@ function createProductCard(product) {
     `;
 }
 
+
+// ================================
+// LOAD PRODUCTS
+// ================================
+
 function loadProducts() {
 
-    const container = document.querySelector("#products");
+    const container =
+        document.getElementById("products");
 
-    if (!container) return;
+    if (!container) {
+        console.error(
+            "MINE MC: #products element not found."
+        );
 
-    container.innerHTML = products
-        .map(product => createProductCard(product))
-        .join("");
+        return;
+    }
+
+    container.innerHTML =
+        products
+            .map(createProductCard)
+            .join("");
+
 }
+
+
+// ================================
+// BUY PRODUCT
+// ================================
 
 function buyProduct(name, price) {
 
-    const url =
+    const paymentPage =
         "payment.html?product=" +
         encodeURIComponent(name) +
         "&price=" +
         encodeURIComponent(price);
-    window.location.href = url;
-}    
 
-document.addEventListener("DOMContentLoaded", loadProducts);
+    window.location.href = paymentPage;
+}
+
+
+// ================================
+// START STORE
+// ================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadProducts
+);
