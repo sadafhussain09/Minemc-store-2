@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MINE MC — Minecraft Server</title>
+  <meta name="description" content="MINE MC — Premium Minecraft Server Store">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #070707;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* =========================
+       ANIMATED BACKGROUND
+    ========================= */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 98, 0, 0.16), transparent 28%),
+        radial-gradient(circle at 80% 70%, rgba(255, 140, 0, 0.10), transparent 30%),
+        linear-gradient(135deg, #090909, #120b07 50%, #050505);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      opacity: 0.18;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 45px 45px;
+      animation: gridMove 18s linear infinite;
+    }
+
+    @keyframes gridMove {
+      from {
+        transform: translate(0, 0);
+      }
+      to {
+        transform: translate(45px, 45px);
+      }
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 18px 6%;
+      background: rgba(5, 5, 5, 0.72);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255, 120, 0, 0.10);
+    }
+
+    .nav {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 25px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 120, 0, 0.25);
+    }
+
+    .brand span {
+      color: #ff7900;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    nav a {
+      color: #cfcfcf;
+      font-size: 14px;
+      font-weight: 700;
+      transition: 0.25s;
+    }
+
+    nav a:hover {
+      color: #ff7900;
+    }
+
+    .discord-btn {
+      padding: 11px 17px;
+      border-radius: 10px;
+      background: #ff7900;
+      color: #111;
+      font-weight: 900;
+      box-shadow: 0 0 25px rgba(255, 121, 0, 0.22);
+    }
+
+    .discord-btn:hover {
+      color: #111;
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(255, 121, 0, 0.38);
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .hero {
+      min-height: 100vh;
+      max-width: 1250px;
+      margin: auto;
+      padding: 150px 6% 80px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 720px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 9px 15px;
+      border: 1px solid rgba(255, 121, 0, 0.30);
+      background: rgba(255, 121, 0, 0.08);
+      border-radius: 100px;
+      color: #ff9a42;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(55px, 9vw, 105px);
+      line-height: 0.9;
+      font-weight: 1000;
+      letter-spacing: -5px;
+      text-transform: uppercase;
+    }
+
+    h1 span {
+      color: #ff7900;
+      text-shadow:
+        0 0 15px rgba(255, 121, 0, 0.35),
+        0 0 55px rgba(255, 121, 0, 0.12);
+    }
+
+    .hero-text {
+      max-width: 570px;
+      margin-top: 25px;
+      color: #aaa;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      padding: 15px 23px;
+      border-radius: 11px;
+      font-weight: 900;
+      transition: 0.25s;
+    }
+
+    .primary-btn {
+      background: #ff7900;
+      color: #111;
+      box-shadow: 0 10px 40px rgba(255, 121, 0, 0.18);
+    }
+
+    .secondary-btn {
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #fff;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .secondary-btn:hover {
+      border-color: rgba(255,121,0,0.45);
+      color: #ff9a42;
+    }
+
+    /* =========================
+       HERO GLOW
+    ========================= */
+
+    .hero-orb {
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -100px;
+      top: 20%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 121, 0, 0.20),
+        rgba(255, 121, 0, 0.05) 35%,
+        transparent 70%
+      );
+      filter: blur(4px);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-22px);
+      }
+    }
+
+    /* =========================
+       STATS
+    ========================= */
+
+    .stats {
+      max-width: 1250px;
+      margin: -30px auto 0;
+      padding: 0 6% 90px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .stat {
+      padding: 24px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .stat strong {
+      display: block;
+      color: #ff7900;
+      font-size: 27px;
+      margin-bottom: 5px;
+    }
+
+    .stat small {
+      color: #888;
+    }
+
+    /* =========================
+       STORE PREVIEW
+    ========================= */
+
+    .section {
+      max-width: 1250px;
+      margin: auto;
+      padding: 90px 6%;
+    }
+
+    .section-heading {
+      margin-bottom: 35px;
+    }
+
+    .section-heading small {
+      color: #ff7900;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(34px, 5vw, 55px);
+      margin-top: 8px;
+    }
+
+    .section-heading p {
+      color: #888;
+      margin-top: 10px;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    .category {
+      min-height: 190px;
+      padding: 25px;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category::before {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      right: -50px;
+      bottom: -50px;
+      border-radius: 50%;
+      background: rgba(255,121,0,0.12);
+      filter: blur(15px);
+    }
+
+    .category:hover {
+      transform: translateY(-7px);
+      border-color: rgba(255,121,0,0.35);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    .category-icon {
+      font-size: 38px;
+      margin-bottom: 20px;
+    }
+
+    .category h3 {
+      font-size: 20px;
+    }
+
+    .category p {
+      color: #888;
+      font-size: 13px;
+      margin-top: 7px;
+    }
+
+    /* =========================
+       SEASON
+    ========================= */
+
+    .season {
+      padding: 0 6% 100px;
+      max-width: 1250px;
+      margin: auto;
+    }
+
+    .season-box {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      padding: 45px;
+      min-height: 280px;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,121,0,0.22), transparent 30%),
+        linear-gradient(120deg, #15100c, #090909);
+      border: 1px solid rgba(255,121,0,0.16);
+    }
+
+    .season-box h2 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .season-box p {
+      color: #999;
+      max-width: 550px;
+      line-height: 1.7;
+    }
+
+    .season-tag {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #ff7900;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 35px 6%;
+      color: #666;
+    }
+
+    .footer-inner {
+      max-width: 1250px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    footer strong {
+      color: #aaa;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      nav a:not(.discord-btn) {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 135px;
+      }
+
+      .hero-orb {
+        right: -250px;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .categories {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 550px) {
+
+      header {
+        padding: 14px 5%;
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+      }
+
+      .hero {
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+
+      h1 {
+        font-size: 58px;
+        letter-spacing: -3px;
+      }
+
+      .hero-text {
+        font-size: 15px;
+      }
+
+      .categories {
+        grid-template-columns: 1fr;
+      }
+
+      .season-box {
+        padding: 30px;
+      }
+
+      .season-box h2 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="nav">
+
+      <a href="#" class="brand">
+        <img
+          src="upi-qr.jpg"
+          class="brand-logo"
+          alt="MINE MC"
+        >
+        <div>MINE <span>MC</span></div>
+      </a>
+
+      <nav>
+        <a href="#store">Store</a>
+        <a href="#season">Season</a>
+        <a
+          href="https://discord.gg/kT8WXQCaN5"
+          target="_blank"
+          class="discord-btn"
+        >
+          Discord
+        </a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+
+    <section class="hero">
+
+      <div class="hero-orb"></div>
+
+      <div class="hero-content">
+
+        <div class="badge">
+          ⚡ MINE MC NETWORK
+        </div>
+
+        <h1>
+          PLAY.<br>
+          <span>DOMINATE.</span>
+        </h1>
+
+        <p class="hero-text">
+          Welcome to MINE MC — your next Minecraft adventure.
+          Get exclusive ranks, coins, crate keys and seasonal
+          rewards from our official store.
+        </p>
+
+        <div class="hero-buttons">
+
+          <a href="#store" class="primary-btn">
+            Open Store →
+          </a>
+
+          <a
+            href="https://discord.gg/kT8WXQCaN5"
+            target="_blank"
+            class="secondary-btn"
+          >
+            Join Discord
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- STATS -->
+    <section class="stats">
+
+      <div class="stat">
+        <strong>24/7</strong>
+        <small>Server Online</small>
+      </div>
+
+      <div class="stat">
+        <strong>∞</strong>
+        <small>Adventure Awaits</small>
+      </div>
+
+      <div class="stat">
+        <strong>MINE MC</strong>
+        <small>Official Network Store</small>
+      </div>
+
+    </section>
+
+    <!-- STORE -->
+    <section class="section" id="store">
+
+      <div class="section-heading">
+        <small>Official Store</small>
+        <h2>Choose Your Upgrade</h2>
+        <p>
+          Premium items made for MINE MC players.
+        </p>
+      </div>
+
+      <div class="categories">
+
+        <a href="#" class="category">
+          <div class="category-icon">👑</div>
+          <h3>Ranks</h3>
+          <p>Unlock exclusive perks and commands.</p>
+        </a>
+
+        <a href="#" class="category">
+          <div class="category-icon">🪙</div>
+          <h3>Coins</h3>
+          <p>Boost your in-game economy.</p>
+        </a>
+
+        <a href="#" class="category">
+          <div class="category-icon">🔑</div>
+          <h3>Crate Keys</h3>
+          <p>Open crates and discover rewards.</p>
+        </a>
+
+        <a href="#season" class="category">
+          <div class="category-icon">⚔️</div>
+          <h3>Season Pass</h3>
+          <p>Exclusive seasonal rewards.</p>
+        </a>
+
+      </div>
+
+    </section>
+
+    <!-- SEASON -->
+    <section class="season" id="season">
+
+      <div class="season-box">
+
+        <div class="season-tag">
+          SEASON 01
+        </div>
+
+        <h2>THE NEXT CHAPTER</h2>
+
+        <p>
+          Prepare for exclusive seasonal content,
+          limited rewards and special MINE MC items.
+          More details coming soon.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#store" class="primary-btn">
+            Explore Store
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="footer-inner">
+
+      <div>
+        © 2026 <strong>MINE MC</strong>. All rights reserved.
+      </div>
+
+      <div>
+        <a
+          href="https://discord.gg/kT8WXQCaN5"
+          target="_blank"
+        >
+          Discord Community
+        </a>
+      </div>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>
