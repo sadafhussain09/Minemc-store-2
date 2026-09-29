@@ -2,399 +2,653 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MINE MC | Payment</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MINE MC - Payment</title>
 
     <style>
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
         body {
+            margin: 0;
             min-height: 100vh;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 25px;
-
+            font-family: Arial, sans-serif;
             background:
                 radial-gradient(
                     circle at top,
-                    rgba(255, 121, 0, 0.15),
-                    transparent 40%
-                ),
-                #050505;
-
+                    #18243b 0%,
+                    #080b12 55%,
+                    #050609 100%
+                );
             color: white;
-
-            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
         }
 
-        .payment-box {
+        .payment-container {
             width: 100%;
-            max-width: 480px;
-
-            padding: 30px;
-
-            background: rgba(15, 15, 15, 0.92);
-
-            border: 1px solid rgba(255, 121, 0, 0.25);
-
-            border-radius: 18px;
-
+            max-width: 520px;
+            background: rgba(15, 20, 31, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: 28px;
             box-shadow:
-                0 25px 80px rgba(0, 0, 0, 0.55);
-
-            text-align: center;
+                0 20px 60px rgba(0, 0, 0, 0.45);
         }
 
         .logo {
-            font-size: 25px;
-            font-weight: 1000;
+            text-align: center;
+            font-size: 30px;
+            font-weight: 900;
             letter-spacing: 2px;
-
             margin-bottom: 8px;
         }
 
-        .logo span {
-            color: #ff7900;
-        }
-
         .subtitle {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 28px;
+            text-align: center;
+            color: #9ca3af;
+            margin-bottom: 26px;
         }
 
-        .product-name {
-            color: #ff7900;
-
-            font-size: 13px;
-            font-weight: 900;
-
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+        .product-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
         }
 
-        h1 {
-            margin-top: 8px;
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 8px 0;
+        }
 
-            font-size: 30px;
+        .label {
+            color: #9ca3af;
+        }
+
+        .value {
+            font-weight: 700;
+            text-align: right;
         }
 
         .price {
-            margin: 12px 0 25px;
-
-            font-size: 34px;
-            font-weight: 1000;
+            font-size: 22px;
         }
 
-        .qr-box {
-            width: 230px;
-            height: 230px;
-
-            margin: 0 auto 22px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: white;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-        }
-
-        .qr-box img {
-            width: 100%;
-            height: 100%;
-
-            object-fit: contain;
-        }
-
-        .upi {
-            padding: 13px;
-
-            margin-bottom: 22px;
-
-            background: rgba(255, 121, 0, 0.08);
-
-            border: 1px solid rgba(255, 121, 0, 0.18);
-
-            border-radius: 8px;
-
-            color: #ddd;
-
-            font-size: 13px;
-        }
-
-        .upi strong {
-            color: #ff7900;
-        }
-
-        .instruction {
-            color: #888;
-
-            font-size: 12px;
-
-            line-height: 1.6;
-
-            margin-bottom: 25px;
-        }
-
-        .field {
-            text-align: left;
-
-            margin-bottom: 15px;
-        }
-
-        .field label {
+        label {
             display: block;
-
-            margin-bottom: 7px;
-
-            color: #aaa;
-
-            font-size: 12px;
+            margin-bottom: 8px;
             font-weight: 700;
         }
 
-        .field input {
+        input {
             width: 100%;
-
-            padding: 13px 14px;
-
-            border: 1px solid rgba(255,255,255,0.10);
-
-            border-radius: 8px;
-
-            outline: none;
-
-            background: rgba(255,255,255,0.04);
-
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #0b0f17;
             color: white;
+            outline: none;
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
 
+        input:focus {
+            border-color: #5865f2;
+        }
+
+        .pay-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 12px;
+            padding: 15px;
+            background: #5865f2;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .pay-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .payment-area {
+            display: none;
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .payment-area.active {
+            display: block;
+        }
+
+        .qr-box {
+            background: white;
+            padding: 14px;
+            border-radius: 16px;
+            width: fit-content;
+            margin: 18px auto;
+        }
+
+        .qr-box img {
+            width: 230px;
+            height: 230px;
+            display: block;
+        }
+
+        .checkout-btn {
+            display: block;
+            text-decoration: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: #22c55e;
+            color: white;
+            font-weight: 800;
+            margin-top: 12px;
+        }
+
+        .upi-btn {
+            display: none;
+            text-decoration: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: #f59e0b;
+            color: white;
+            font-weight: 800;
+            margin-top: 12px;
+        }
+
+        .status {
+            margin-top: 18px;
+            padding: 13px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #d1d5db;
             font-size: 14px;
         }
 
-        .field input:focus {
-            border-color: #ff7900;
+        .success {
+            color: #4ade80;
         }
 
-        .submit-btn {
-            width: 100%;
-
-            margin-top: 8px;
-
-            padding: 14px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            background: #ff7900;
-
-            color: white;
-
-            cursor: pointer;
-
-            font-size: 13px;
-            font-weight: 1000;
-
-            transition: 0.2s;
-        }
-
-        .submit-btn:hover {
-            background: #ff8d24;
-            transform: translateY(-2px);
+        .error {
+            color: #f87171;
         }
 
         .back {
-            display: inline-block;
-
+            display: block;
+            text-align: center;
             margin-top: 20px;
-
-            color: #777;
-
-            font-size: 12px;
+            color: #9ca3af;
+            text-decoration: none;
         }
 
         .back:hover {
-            color: #ff7900;
+            color: white;
+        }
+
+        .small {
+            color: #9ca3af;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 12px;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="payment-box">
+<div class="payment-container">
 
-        <div class="logo">
-            MINE <span>MC</span>
-        </div>
+    <div class="logo">
+        MINE MC
+    </div>
 
-        <div class="subtitle">
-            Secure UPI Payment
-        </div>
+    <div class="subtitle">
+        Secure UPI Checkout
+    </div>
 
-        <div class="product-name" id="productName">
-            MINE MC PRODUCT
-        </div>
+    <div class="product-box">
 
-        <h1>
-            Complete Payment
-        </h1>
-
-        <div class="price" id="productPrice">
-            ₹0
-        </div>
-
-
-        <div class="qr-box">
-
-            <img
-                src="qr.png"
-                alt="MINE MC UPI QR"
+        <div class="row">
+            <span class="label">Product</span>
+            <span
+                class="value"
+                id="productName"
             >
-                
+                Loading...
+            </span>
         </div>
 
-
-        <div class="upi">
-            Pay to:
-            <strong>
-                6207867258@fam
-            </strong>
-        </div>
-
-
-        <div class="instruction">
-            QR scan karke exact amount pay karein.
-            Payment complete hone ke baad neeche
-            Minecraft username aur UTR / Transaction ID enter karein.
-        </div>
-
-
-        <form id="paymentForm">
-
-            <div class="field">
-
-                <label>
-                    Minecraft Username
-                </label>
-
-                <input
-                    type="text"
-                    id="minecraftUsername"
-                    placeholder="Your Minecraft username"
-                    required
-                >
-
-            </div>
-
-
-            <div class="field">
-
-                <label>
-                    UTR / Transaction ID
-                </label>
-
-                <input
-                    type="text"
-                    id="utr"
-                    placeholder="Enter payment UTR"
-                    required
-                >
-
-            </div>
-
-
-            <button
-                type="submit"
-                class="submit-btn"
+        <div class="row">
+            <span class="label">Amount</span>
+            <span
+                class="value price"
+                id="productPrice"
             >
-                SUBMIT PAYMENT
-            </button>
+                ₹0
+            </span>
+        </div>
 
-        </form>
+    </div>
 
+    <div id="usernameSection">
 
-        <a
-            href="index.html"
-            class="back"
+        <label for="username">
+            Minecraft Username
+        </label>
+
+        <input
+            id="username"
+            type="text"
+            maxlength="16"
+            placeholder="Enter your Minecraft username"
+            autocomplete="off"
         >
-            ← Back to Store
-        </a>
+
+        <button
+            class="pay-btn"
+            id="createOrderBtn"
+            onclick="createOrder()"
+        >
+            CONTINUE TO PAYMENT
+        </button>
 
     </div>
 
 
-    <script>
+    <div
+        class="payment-area"
+        id="paymentArea"
+    >
 
-        const params =
-            new URLSearchParams(window.location.search);
+        <h2>
+            Complete Payment
+        </h2>
 
-        const product =
-            params.get("product");
+        <p>
+            Scan the QR code or use the payment button below.
+        </p>
 
-        const price =
-            params.get("price");
+        <div class="qr-box">
+
+            <img
+                id="qrImage"
+                src=""
+                alt="MINE MC Dynamic UPI QR"
+            >
+
+        </div>
+
+        <a
+            id="upiButton"
+            class="upi-btn"
+            href="#"
+        >
+            OPEN UPI APP
+        </a>
+
+        <a
+            id="checkoutButton"
+            class="checkout-btn"
+            href="#"
+            target="_blank"
+            rel="noopener"
+        >
+            OPEN PAYMENT PAGE
+        </a>
+
+        <div
+            class="status"
+            id="paymentStatus"
+        >
+            Waiting for payment...
+        </div>
+
+        <div class="small">
+            Do not close this page until your payment is confirmed.
+            Payment verification is automatic.
+        </div>
+
+    </div>
 
 
-        if (product) {
-            document.getElementById(
-                "productName"
-            ).textContent = product;
+    <a
+        class="back"
+        href="index.html"
+    >
+        ← Back to Store
+    </a>
+
+</div>
+
+
+<script>
+    // =========================================
+    // READ PRODUCT FROM URL
+    // =========================================
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const productId =
+        params.get("product") || "";
+
+    const productName =
+        params.get("name") || "Unknown Product";
+
+    const productPrice =
+        Number(params.get("price") || 0);
+
+
+    document.getElementById(
+        "productName"
+    ).textContent = productName;
+
+    document.getElementById(
+        "productPrice"
+    ).textContent = "₹" + productPrice;
+
+
+    let currentOrderId = null;
+    let statusTimer = null;
+
+
+    // =========================================
+    // CREATE PAYMENT ORDER
+    // =========================================
+
+    async function createOrder() {
+
+        const usernameInput =
+            document.getElementById("username");
+
+        const username =
+            usernameInput.value.trim();
+
+        const button =
+            document.getElementById("createOrderBtn");
+
+        const status =
+            document.getElementById("paymentStatus");
+
+
+        if (!/^[A-Za-z0-9_]{3,16}$/.test(username)) {
+
+            alert(
+                "Please enter a valid Minecraft username."
+            );
+
+            usernameInput.focus();
+
+            return;
         }
 
 
-        if (price) {
-            document.getElementById(
-                "productPrice"
-            ).textContent = "₹" + price;
-        }
+        button.disabled = true;
+
+        button.textContent =
+            "CREATING PAYMENT...";
 
 
-        document
-            .getElementById("paymentForm")
-            .addEventListener("submit", function(event) {
+        try {
 
-                event.preventDefault();
+            const response =
+                await fetch(
+                    "/api/create-order",
+                    {
+                        method: "POST",
 
-                const username =
-                    document.getElementById(
-                        "minecraftUsername"
-                    ).value.trim();
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                const utr =
-                    document.getElementById(
-                        "utr"
-                    ).value.trim();
+                        body: JSON.stringify({
+                            productId:
+                                productId,
 
-
-                if (!username || !utr) {
-                    alert(
-                        "Please enter Minecraft username and UTR."
-                    );
-
-                    return;
-                }
-
-
-                alert(
-                    "Payment details submitted!\n\n" +
-                    "Automatic verification system will be connected next."
+                            username:
+                                username
+                        })
+                    }
                 );
 
-            });
 
-    </script>
+            const data =
+                await response.json();
+
+
+            if (
+                !response.ok ||
+                !data.success ||
+                !data.orderId
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "Unable to create payment."
+                );
+            }
+
+
+            currentOrderId =
+                data.orderId;
+
+
+            // =================================
+            // SHOW DYNAMIC QR
+            // =================================
+
+            const qrImage =
+                document.getElementById(
+                    "qrImage"
+                );
+
+            qrImage.src =
+                data.qrUrl;
+
+
+            // =================================
+            // HOSTED CHECKOUT
+            // =================================
+
+            const checkoutButton =
+                document.getElementById(
+                    "checkoutButton"
+                );
+
+            checkoutButton.href =
+                data.checkoutUrl ||
+                "#";
+
+
+            // =================================
+            // UPI INTENT
+            // =================================
+
+            const upiButton =
+                document.getElementById(
+                    "upiButton"
+                );
+
+
+            if (data.upiIntent) {
+
+                upiButton.href =
+                    data.upiIntent;
+
+                upiButton.style.display =
+                    "block";
+
+            }
+
+
+            document.getElementById(
+                "usernameSection"
+            ).style.display =
+                "none";
+
+
+            document.getElementById(
+                "paymentArea"
+            ).classList.add("active");
+
+
+            status.textContent =
+                "Waiting for payment...";
+
+
+            startPaymentChecking();
+
+
+        } catch (error) {
+
+            console.error(
+                "Payment error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Something went wrong."
+            );
+
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "CONTINUE TO PAYMENT";
+        }
+    }
+
+
+    // =========================================
+    // CHECK PAYMENT STATUS
+    // =========================================
+
+    function startPaymentChecking() {
+
+        if (!currentOrderId) {
+            return;
+        }
+
+
+        checkPaymentStatus();
+
+
+        statusTimer =
+            setInterval(
+                checkPaymentStatus,
+                4000
+            );
+    }
+
+
+    async function checkPaymentStatus() {
+
+        if (!currentOrderId) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "https://famgateway.in/api/checkout-status.php?order_id=" +
+                    encodeURIComponent(
+                        currentOrderId
+                    ),
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            const status =
+                document.getElementById(
+                    "paymentStatus"
+                );
+
+
+            if (data.status === "success") {
+
+                clearInterval(
+                    statusTimer
+                );
+
+
+                status.className =
+                    "status success";
+
+
+                status.innerHTML =
+                    "<strong>✓ PAYMENT CONFIRMED</strong><br>" +
+                    "Your payment has been verified.<br>" +
+                    "Your Minecraft purchase will now be processed.";
+
+
+                return;
+            }
+
+
+            if (data.status === "expired") {
+
+                clearInterval(
+                    statusTimer
+                );
+
+
+                status.className =
+                    "status error";
+
+
+                status.textContent =
+                    "This payment session has expired. Please create a new order.";
+
+                return;
+            }
+
+
+            status.className =
+                "status";
+
+
+            status.textContent =
+                "Waiting for payment...";
+
+
+        } catch (error) {
+
+            console.error(
+                "Status check error:",
+                error
+            );
+
+        }
+    }
+</script>
 
 </body>
 </html>
