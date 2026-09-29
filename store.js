@@ -118,7 +118,7 @@ const products = [
         id: "coins_12000",
         category: "Coins",
         name: "12,000 Coins",
-        price: 445,
+        price: 300,
         icon: "🪙",
         description: "Add 12,000 coins to your Minecraft account."
     },
