@@ -6,7 +6,7 @@ const PRODUCTS: Record<
   string,
   {
     price: number;
-    command: (player: string) => string;
+    commands: (player: string) => string[];
   }
 > = {
   // ================================
@@ -15,54 +15,62 @@ const PRODUCTS: Record<
 
   god: {
     price: 300,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent set god`,
+    ],
   },
 
   legend: {
     price: 270,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent set legend`,
+    ],
   },
 
   hero: {
     price: 220,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent set hero`,
+    ],
   },
 
   pro: {
     price: 150,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent set pro`,
+    ],
   },
 
   // ================================
-  // TIMED RANKS
+  // MONTHLY RANKS
   // ================================
 
   god_monthly: {
     price: 180,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent addtemp god 30d`,
+    ],
   },
 
   legend_monthly: {
     price: 150,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent addtemp legend 30d`,
+    ],
   },
 
   hero_monthly: {
     price: 70,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent addtemp hero 30d`,
+    ],
   },
 
   pro_monthly: {
     price: 40,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} parent addtemp pro 30d`,
+    ],
   },
 
   // ================================
@@ -71,26 +79,30 @@ const PRODUCTS: Record<
 
   coins_1100: {
     price: 60,
-    command: (player) =>
+    commands: (player) => [
       `p give ${player} 1100`,
+    ],
   },
 
   coins_2400: {
     price: 115,
-    command: (player) =>
+    commands: (player) => [
       `p give ${player} 2400`,
+    ],
   },
 
   coins_5300: {
     price: 230,
-    command: (player) =>
+    commands: (player) => [
       `p give ${player} 5300`,
+    ],
   },
 
   coins_12000: {
     price: 445,
-    command: (player) =>
+    commands: (player) => [
       `p give ${player} 12000`,
+    ],
   },
 
   // ================================
@@ -99,36 +111,45 @@ const PRODUCTS: Record<
 
   insane_key_5x: {
     price: 180,
-    command: (player) =>
+    commands: (player) => [
       `crate key give ${player} insane 5`,
+    ],
   },
 
   epic_key_5x: {
     price: 150,
-    command: (player) =>
+    commands: (player) => [
       `crate key give ${player} epic 5`,
+    ],
   },
 
   rare_key_5x: {
     price: 120,
-    command: (player) =>
+    commands: (player) => [
       `crate key give ${player} rare 5`,
+    ],
   },
 
   // ================================
-  // SEASON PASS
+  // SEASON - FLY
   // ================================
 
   fly_season: {
     price: 270,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} permission set essential.fly true`,
+    ],
   },
+
+  // ================================
+  // SEASON - RESIZE
+  // ================================
 
   size_season: {
     price: 190,
-    command: (player) =>
+    commands: (player) => [
       `lp user ${player} permission set resizeplayers.scale.self true`,
+    ],
   },
 };
 
@@ -142,17 +163,24 @@ function verifySignature(
   receivedSignature: string,
   apiKey: string
 ): boolean {
-  const expectedSignature =
-    crypto
-      .createHmac("sha256", apiKey)
-      .update(rawBody)
-      .digest("hex");
+  if (!receivedSignature) {
+    return false;
+  }
 
-  const receivedBuffer =
-    Buffer.from(receivedSignature, "utf8");
+  const expectedSignature = crypto
+    .createHmac("sha256", apiKey)
+    .update(rawBody)
+    .digest("hex");
 
-  const expectedBuffer =
-    Buffer.from(expectedSignature, "utf8");
+  const receivedBuffer = Buffer.from(
+    receivedSignature.trim(),
+    "utf8"
+  );
+
+  const expectedBuffer = Buffer.from(
+    expectedSignature,
+    "utf8"
+  );
 
   if (
     receivedBuffer.length !==
@@ -178,25 +206,30 @@ async function verifyFamGatewayOrder(
 ) {
   const url =
     "https://famgateway.in/api/verify-order.php" +
-    "?order_id=" +
+    "?api_key=" +
+    encodeURIComponent(apiKey) +
+    "&order_id=" +
     encodeURIComponent(orderId);
 
   const response = await fetch(url, {
     method: "GET",
     headers: {
-      "X-Api-Key": apiKey,
       Accept: "application/json",
     },
     cache: "no-store",
   });
 
+  const result = await response.json();
+
   if (!response.ok) {
     throw new Error(
-      `FamGateway verification failed: ${response.status}`
+      `FamGateway verification failed: ${response.status} ${JSON.stringify(
+        result
+      )}`
     );
   }
 
-  return await response.json();
+  return result;
 }
 
 
@@ -230,13 +263,11 @@ async function sendPterodactylCommand(
 
   const response = await fetch(url, {
     method: "POST",
-
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-
     body: JSON.stringify({
       command,
     }),
@@ -263,6 +294,10 @@ export async function POST(
   request: NextRequest
 ) {
   try {
+    // ====================================
+    // ENVIRONMENT
+    // ====================================
+
     const apiKey =
       process.env.FAMGATEWAY_API_KEY;
 
@@ -281,8 +316,10 @@ export async function POST(
     }
 
 
-    // IMPORTANT:
-    // Read RAW body before JSON parsing.
+    // ====================================
+    // READ RAW WEBHOOK BODY
+    // ====================================
+
     const rawBody =
       await request.text();
 
@@ -293,7 +330,7 @@ export async function POST(
 
 
     // ====================================
-    // HMAC VERIFICATION
+    // VERIFY SIGNATURE
     // ====================================
 
     if (
@@ -318,14 +355,13 @@ export async function POST(
 
 
     // ====================================
-    // PARSE VERIFIED PAYLOAD
+    // PARSE PAYLOAD
     // ====================================
 
     let payload: any;
 
     try {
-      payload =
-        JSON.parse(rawBody);
+      payload = JSON.parse(rawBody);
     } catch {
       return NextResponse.json(
         {
@@ -337,6 +373,10 @@ export async function POST(
     }
 
 
+    // ====================================
+    // READ PAYMENT DATA
+    // ====================================
+
     const orderId =
       String(
         payload.order_id || ""
@@ -345,21 +385,26 @@ export async function POST(
     const webhookStatus =
       String(
         payload.status || ""
-      ).toLowerCase();
+      ).toLowerCase()
+      .trim();
 
     const webhookAmount =
       Number(
-        payload.amount || 0
+        payload.amount ??
+        payload.payable_amount ??
+        0
       );
+
+    const transactionId =
+      payload.transaction_id
+        ? String(
+            payload.transaction_id
+          )
+        : null;
 
     const utr =
       payload.utr
         ? String(payload.utr)
-        : null;
-
-    const transactionId =
-      payload.transaction_id
-        ? String(payload.transaction_id)
         : null;
 
 
@@ -374,7 +419,10 @@ export async function POST(
     }
 
 
-    // Webhook only fulfills successful payments.
+    // ====================================
+    // ONLY PROCESS SUCCESS PAYMENTS
+    // ====================================
+
     if (
       webhookStatus !==
       "success"
@@ -386,7 +434,7 @@ export async function POST(
 
 
     // ====================================
-    // FIND OUR ORDER
+    // FIND ORDER
     // ====================================
 
     const order =
@@ -395,7 +443,6 @@ export async function POST(
           orderId,
         },
       });
-
 
     if (!order) {
       console.error(
@@ -414,18 +461,20 @@ export async function POST(
 
 
     // ====================================
-    // ALREADY DELIVERED?
+    // ALREADY DELIVERED
     // ====================================
 
     if (order.delivered) {
       return NextResponse.json({
-        status: "already_delivered",
+        status:
+          "already_delivered",
+        orderId,
       });
     }
 
 
     // ====================================
-    // CHECK PRODUCT
+    // FIND PRODUCT
     // ====================================
 
     const product =
@@ -433,14 +482,14 @@ export async function POST(
 
     if (!product) {
       console.error(
-        "Invalid stored product:",
+        "Unknown product:",
         order.product
       );
 
       return NextResponse.json(
         {
           error:
-            "Invalid product.",
+            "Unknown product.",
         },
         { status: 500 }
       );
@@ -448,7 +497,7 @@ export async function POST(
 
 
     // ====================================
-    // CHECK EXPECTED PRICE
+    // CHECK DATABASE PRICE
     // ====================================
 
     if (
@@ -457,7 +506,12 @@ export async function POST(
     ) {
       console.error(
         "Database price mismatch:",
-        orderId
+        {
+          orderId,
+          product: order.product,
+          expected: product.price,
+          stored: order.price,
+        }
       );
 
       return NextResponse.json(
@@ -479,7 +533,7 @@ export async function POST(
       order.price
     ) {
       console.error(
-        "Payment amount mismatch:",
+        "Webhook amount mismatch:",
         {
           orderId,
           expected: order.price,
@@ -498,7 +552,7 @@ export async function POST(
 
 
     // ====================================
-    // AUTHORITATIVE SERVER CHECK
+    // AUTHORITATIVE FAMGATEWAY CHECK
     // ====================================
 
     const verified =
@@ -507,13 +561,14 @@ export async function POST(
         apiKey
       );
 
-
     const verifiedStatus =
       String(
-        verified.status ||
-        verified.data?.status ||
+        verified.status ??
+        verified.data?.status ??
         ""
-      ).toLowerCase();
+      )
+        .toLowerCase()
+        .trim();
 
 
     if (
@@ -521,7 +576,7 @@ export async function POST(
       "success"
     ) {
       console.error(
-        "Authoritative payment verification failed:",
+        "FamGateway verification failed:",
         verified
       );
 
@@ -534,6 +589,10 @@ export async function POST(
       );
     }
 
+
+    // ====================================
+    // CHECK VERIFIED AMOUNT
+    // ====================================
 
     const verifiedAmount =
       Number(
@@ -571,10 +630,6 @@ export async function POST(
     // ====================================
     // CLAIM ORDER
     // ====================================
-    //
-    // This prevents two webhook requests
-    // from processing the same pending order
-    // simultaneously.
 
     const claim =
       await prisma.order.updateMany({
@@ -588,12 +643,10 @@ export async function POST(
             ],
           },
         },
-
         data: {
           status: "processing",
-          transactionId:
-            transactionId,
-          utr: utr,
+          transactionId,
+          utr,
         },
       });
 
@@ -602,62 +655,63 @@ export async function POST(
       return NextResponse.json({
         status:
           "already_processing",
+        orderId,
       });
     }
 
 
     // ====================================
-    // BUILD FIXED COMMAND
+    // CREATE COMMANDS
     // ====================================
 
-    const command =
-      product.command(
+    const commands =
+      product.commands(
         order.username
       );
 
 
     console.log(
-      `Delivering ${order.product} to ${order.username}`
-    );
-
-    console.log(
-      `Pterodactyl command: ${command}`
+      "MINE MC DELIVERY",
+      {
+        orderId,
+        product: order.product,
+        username: order.username,
+        commands,
+      }
     );
 
 
     // ====================================
-    // SEND COMMAND
+    // SEND ALL COMMANDS
     // ====================================
 
     try {
-      await sendPterodactylCommand(
-        command
-      );
+      for (
+        const command of commands
+      ) {
+        await sendPterodactylCommand(
+          command
+        );
+      }
     } catch (deliveryError) {
-
       console.error(
         "Pterodactyl delivery failed:",
         deliveryError
       );
 
-
-      // Return order to pending so
-      // FamGateway can retry the webhook.
       await prisma.order.update({
         where: {
           id: order.id,
         },
-
         data: {
           status: "pending",
         },
       });
 
-
       return NextResponse.json(
         {
           error:
-            "Minecraft delivery failed. Webhook will be retried.",
+            "Minecraft delivery failed.",
         },
         { status: 500 }
       );
@@ -665,28 +719,31 @@ export async function POST(
 
 
     // ====================================
-    // MARK DELIVERED
+    // MARK AS DELIVERED
     // ====================================
 
     await prisma.order.update({
       where: {
         id: order.id,
       },
-
       data: {
         status: "delivered",
         delivered: true,
-        transactionId:
-          transactionId,
-        utr: utr,
+        transactionId,
+        utr,
         deliveryMessage:
-          `Delivered using command: ${command}`,
+          `Delivered ${order.product} to ${order.username}.`,
       },
     });
 
 
     console.log(
-      `Successfully delivered ${order.product} to ${order.username}`
+      "MINE MC DELIVERY SUCCESS",
+      {
+        orderId,
+        product: order.product,
+        username: order.username,
+      }
     );
 
 
@@ -696,7 +753,6 @@ export async function POST(
     });
 
   } catch (error) {
-
     console.error(
       "FamGateway webhook error:",
       error
@@ -710,4 +766,4 @@ export async function POST(
       { status: 500 }
     );
   }
-}
+      }
